@@ -1,7 +1,8 @@
 mod day1;
 mod day2;
+mod day3;
 mod util;
 
 fn main() {
-	print!("{}", day2::solution::part2())
+	print!("{}", day3::solution::part2())
 }
