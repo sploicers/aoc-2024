@@ -28,16 +28,21 @@ pub fn part2() -> i32 {
 
 	for (i, char) in input_str.chars().filter(|c| !c.is_whitespace()).enumerate() {
 		if char == 'A' {
+			let mut diag_matches = 0;
+
 			for (d1, d2) in Direction::diags() {
 				match (
 					grid.next_char_in_direction(i, d1),
 					grid.next_char_in_direction(i, d2),
 				) {
 					(Some('M'), Some('S')) | (Some('S'), Some('M')) => {
-						xmas_count += 1;
+						diag_matches += 1;
 					}
 					_ => continue,
 				}
+			}
+			if diag_matches == 2 {
+				xmas_count += 1;
 			}
 		}
 	}
