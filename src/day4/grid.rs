@@ -51,7 +51,7 @@ impl SquareGrid {
 				.next_pos_in_direction(pos, Direction::N)
 				.and_then(|i| self.next_pos_in_direction(i, Direction::W)),
 		}
-		.and_then(|i| self.data.get(i).map(|c| (i, c)))
+		.map(|i| (i, &self.data[i]))
 	}
 
 	pub fn next_char_in_direction(&self, pos: usize, dir: Direction) -> Option<&char> {
