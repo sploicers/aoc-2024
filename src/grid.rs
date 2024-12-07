@@ -1,15 +1,16 @@
-pub struct SquareGrid {
+pub struct Grid {
+	pub n: usize,
+	pub m: usize,
 	data: Vec<char>,
-	n: usize,
 }
 
 pub struct DirectionalGridIterator<'g> {
-	grid: &'g SquareGrid,
+	grid: &'g Grid,
 	pos: usize,
 	dir: Direction,
 }
 
-impl SquareGrid {
+impl Grid {
 	pub fn new(s: &str) -> Self {
 		let lines = s.lines().collect::<Vec<_>>();
 		let n = lines
@@ -17,23 +18,25 @@ impl SquareGrid {
 			.expect("grid can only be constructed from multi-line input")
 			.len();
 
+		let m = lines.len();
+
 		let data = lines
 			.into_iter()
 			.flat_map(|line| line.chars().map(|c| c.into()))
 			.collect::<Vec<_>>();
 
-		Self { data, n }
+		Self { data, n, m }
 	}
 
 	pub fn next_in_direction(&self, pos: usize, dir: Direction) -> Option<(usize, &char)> {
 		let x = pos % self.n;
-		let y = pos / self.n;
+		let y = pos / self.m;
 
 		match dir {
 			Direction::N => (y != 0).then(|| pos - self.n),
-			Direction::E => (x != 0).then(|| pos - 1),
-			Direction::S => (y != self.n - 1).then_some(pos + self.n),
-			Direction::W => (x != self.n - 1).then_some(pos + 1),
+			Direction::E => (x != 0).then(|| pos + 1),
+			Direction::S => (y != self.m - 1).then_some(pos + self.n),
+			Direction::W => (x != self.n - 1).then_some(pos - 1),
 
 			Direction::NE => self
 				.next_pos_in_direction(pos, Direction::N)
