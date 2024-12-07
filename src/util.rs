@@ -6,12 +6,6 @@ use std::{
 
 use regex::Regex;
 
-pub fn read_input_lines() -> impl Iterator<Item = String> {
-	BufReader::new(get_input_reader())
-		.lines()
-		.flat_map(Result::ok)
-}
-
 pub fn get_input_reader() -> BufReader<Box<dyn Read>> {
 	let reader: Box<dyn Read> = if let Some(filename) = filename_from_args() {
 		Box::new(File::open(&filename).expect(&format!("No such file {}!", filename)))
@@ -19,6 +13,20 @@ pub fn get_input_reader() -> BufReader<Box<dyn Read>> {
 		Box::new(io::stdin())
 	};
 	BufReader::new(reader)
+}
+
+pub fn read_input_lines() -> impl Iterator<Item = String> {
+	BufReader::new(get_input_reader())
+		.lines()
+		.flat_map(Result::ok)
+}
+
+pub fn read_input_as_str() -> String {
+	let mut buf = String::new();
+	get_input_reader()
+		.read_to_string(&mut buf)
+		.expect("Failed to read input as string.");
+	buf
 }
 
 fn filename_from_args() -> Option<String> {
