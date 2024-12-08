@@ -34,7 +34,7 @@ impl Grid {
 
 		match dir {
 			Direction::N => (y != 0).then(|| pos - self.n),
-			Direction::E => (x != 0).then(|| pos + 1),
+			Direction::E => (x != 0).then_some(pos + 1),
 			Direction::S => (y != self.m - 1).then_some(pos + self.n),
 			Direction::W => (x != self.n - 1).then_some(pos - 1),
 
@@ -66,11 +66,11 @@ impl Grid {
 	}
 
 	pub fn iter_in_direction(&self, pos: usize, dir: Direction) -> DirectionalGridIterator {
-		DirectionalGridIterator {
-			grid: self,
-			pos,
-			dir,
-		}
+		DirectionalGridIterator { grid: self, pos, dir }
+	}
+
+	pub fn update_pos(&mut self, pos: usize, c: char) {
+		self.data[pos] = c;
 	}
 }
 
@@ -87,7 +87,7 @@ impl<'c> Iterator for DirectionalGridIterator<'c> {
 	}
 }
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
 pub enum Direction {
 	N,
 	NE,
