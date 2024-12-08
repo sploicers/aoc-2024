@@ -34,8 +34,8 @@ impl Grid {
 
 		match dir {
 			Direction::N => (y > 0).then(|| pos - self.n),
-			Direction::E => (x != self.n - 1).then_some(pos + 1),
-			Direction::S => (y != self.m - 1).then_some(pos + self.n),
+			Direction::E => (x < self.n - 1).then_some(pos + 1),
+			Direction::S => (y < self.m - 1).then_some(pos + self.n),
 			Direction::W => (x > 0).then(|| pos - 1),
 
 			Direction::NE => self
