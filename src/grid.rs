@@ -33,10 +33,10 @@ impl Grid {
 		let y = pos / self.m;
 
 		match dir {
-			Direction::N => (y != 0).then(|| pos - self.n),
-			Direction::E => (x != 0).then_some(pos + 1),
+			Direction::N => (y > 0).then(|| pos - self.n),
+			Direction::E => (x != self.n - 1).then_some(pos + 1),
 			Direction::S => (y != self.m - 1).then_some(pos + self.n),
-			Direction::W => (x != self.n - 1).then_some(pos - 1),
+			Direction::W => (x > 0).then(|| pos - 1),
 
 			Direction::NE => self
 				.next_pos_in_direction(pos, Direction::N)
