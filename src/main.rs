@@ -10,5 +10,5 @@ mod grid;
 mod util;
 
 fn main() {
-	print!("{}", day7::solution::part1())
+	print!("{}", day7::solution::part2())
 }
