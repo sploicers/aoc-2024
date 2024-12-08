@@ -10,27 +10,14 @@ enum Operator {
 }
 
 pub fn part1() -> usize {
-	let mut sum: usize = 0;
-
-	for line in get_input_reader().lines().flatten() {
-		let (lhs, rhs) = line.split_once(": ").expect("Encountered malformed line.");
-
-		let nums: Vec<usize> = rhs
-			.split_ascii_whitespace()
-			.flat_map(|s| s.parse())
-			.collect();
-
-		let target: usize = lhs.parse().expect("Failed to parse LHS as int");
-		let ways = combinations(State { nums, operators: vec![], target });
-
-		if ways > 0 {
-			sum += target;
-		}
-	}
-	sum
+	evaluate(combinations)
 }
 
 pub fn part2() -> usize {
+	evaluate(combinations2)
+}
+
+fn evaluate(count_combinations: fn(State) -> usize) -> usize {
 	let mut sum: usize = 0;
 
 	for line in get_input_reader().lines().flatten() {
@@ -42,7 +29,7 @@ pub fn part2() -> usize {
 			.collect();
 
 		let target: usize = lhs.parse().expect("Failed to parse LHS as int");
-		let ways = combinations2(State { nums, operators: vec![], target });
+		let ways = count_combinations(State { nums, operators: vec![], target });
 
 		if ways > 0 {
 			sum += target;

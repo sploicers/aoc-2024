@@ -27,7 +27,7 @@ pub fn part2() -> usize {
 	count
 }
 
-fn traverse(grid: &Grid, input_str: &str, visit: impl Fn(usize, Direction, &Path) -> bool) -> Path {
+fn traverse(grid: &Grid, input_str: &str, visit: fn(usize, Direction, &Path) -> bool) -> Path {
 	let mut guard_direction = Direction::N;
 	let mut guard_position = input_str
 		.replace('\n', "")
