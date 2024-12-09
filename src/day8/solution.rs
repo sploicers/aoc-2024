@@ -11,7 +11,7 @@ struct State {
 }
 
 pub fn part1() -> usize {
-	let State { mut grid, antennae_by_pos } = parse();
+	let State { grid, antennae_by_pos } = parse();
 	let mut antinodes: HashSet<Point> = HashSet::new();
 
 	for positions in antennae_by_pos.values() {
@@ -29,16 +29,13 @@ pub fn part1() -> usize {
 
 				if grid.contains(a1) {
 					antinodes.insert(a1);
-					grid.update_pos(grid.coords_1d(a1).unwrap(), '#');
 				}
 				if grid.contains(a2) {
 					antinodes.insert(a2);
-					grid.update_pos(grid.coords_1d(a2).unwrap(), '#');
 				}
 			}
 		}
 	}
-	println!("{}", grid);
 	antinodes.len()
 }
 
