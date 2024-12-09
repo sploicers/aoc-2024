@@ -1,3 +1,8 @@
+use std::{
+	fmt::Display,
+	ops::{Add, Sub},
+};
+
 pub struct Grid {
 	pub n: usize,
 	pub m: usize,
@@ -72,6 +77,32 @@ impl Grid {
 	pub fn update_pos(&mut self, pos: usize, c: char) {
 		self.data[pos] = c;
 	}
+
+	pub fn coords_1d(&self, p: Point) -> Option<usize> {
+		self.contains(p)
+			.then_some((p.y as usize * self.n) + p.x as usize)
+	}
+
+	pub fn coords_2d(&self, i: usize) -> Point {
+		Point { x: (i % self.n) as isize, y: (i / self.n) as isize }
+	}
+
+	pub fn contains(&self, p: Point) -> bool {
+		p.x >= 0 && p.y >= 0 && (p.x as usize) < self.n && (p.y as usize) < self.m
+	}
+}
+
+impl Display for Grid {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		for (i, c) in self.data.iter().enumerate() {
+			if (i + 1) % self.n == 0 {
+				writeln!(f, "{}", c)?;
+			} else {
+				write!(f, "{}", c)?;
+			}
+		}
+		Ok(())
+	}
 }
 
 impl<'c> Iterator for DirectionalGridIterator<'c> {
@@ -115,5 +146,27 @@ impl Direction {
 
 	pub fn diags() -> Vec<(Direction, Direction)> {
 		vec![(Self::NW, Self::SE), (Self::NE, Self::SW)]
+	}
+}
+
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
+pub struct Point {
+	pub x: isize,
+	pub y: isize,
+}
+
+impl Sub for Point {
+	type Output = Self;
+
+	fn sub(self, rhs: Self) -> Self {
+		Self { x: self.x - rhs.x, y: self.y - rhs.y }
+	}
+}
+
+impl Add for Point {
+	type Output = Self;
+
+	fn add(self, rhs: Self) -> Self {
+		Self { x: self.x + rhs.x, y: self.y + rhs.y }
 	}
 }
