@@ -1,9 +1,5 @@
+use crate::{grid::Grid, util::read_input_as_str};
 use std::collections::{HashMap, HashSet};
-
-use crate::{
-	grid::{Grid, Point},
-	util::read_input_as_str,
-};
 
 struct State {
 	grid: Box<Grid>,
@@ -12,7 +8,7 @@ struct State {
 
 pub fn part1() -> usize {
 	let State { grid, antennae_by_pos } = parse();
-	let mut antinodes: HashSet<Point> = HashSet::new();
+	let mut antinodes = HashSet::new();
 
 	for positions in antennae_by_pos.values() {
 		for i in positions {
@@ -32,6 +28,47 @@ pub fn part1() -> usize {
 				}
 				if grid.contains(a2) {
 					antinodes.insert(a2);
+				}
+			}
+		}
+	}
+	antinodes.len()
+}
+
+pub fn part2() -> usize {
+	let State { grid, antennae_by_pos } = parse();
+	let mut antinodes = HashSet::new();
+
+	for positions in antennae_by_pos.values() {
+		for i in positions {
+			for j in positions {
+				if i == j {
+					continue;
+				}
+
+				let mut p1 = grid.coords_2d(*i);
+				let mut p2 = grid.coords_2d(*j);
+				let dist = p2 - p1;
+				antinodes.insert(p1);
+				antinodes.insert(p2);
+
+				loop {
+					let a = p1 - dist;
+					if grid.contains(a) {
+						antinodes.insert(a);
+						p1 = a;
+					} else {
+						break;
+					}
+				}
+				loop {
+					let a = p2 + dist;
+					if grid.contains(a) {
+						antinodes.insert(a);
+						p2 = a;
+					} else {
+						break;
+					}
 				}
 			}
 		}
